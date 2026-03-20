@@ -15,7 +15,7 @@ import Profile from './pages/Profile'
 import PaymentSimulator from './pages/PaymentSimulator'
 import useGetCurrentUser from './hooks/getCurrentUser'
 
-export const serverUrl = "http://localhost:5000"
+export const serverUrl = "https://foodzito-backend.onrender.com"
 
 function App() {
     useGetCurrentUser()
