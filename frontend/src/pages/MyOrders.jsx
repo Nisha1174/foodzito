@@ -5,12 +5,12 @@ import { serverUrl } from '../App'
 import Navbar from '../components/Navbar'
 
 const statusConfig = {
-    pending: { label: 'Pending', bg: '#fef9c3', color: '#854d0e', icon: '⏳' },
-    confirmed: { label: 'Confirmed', bg: '#e0f2fe', color: '#0369a1', icon: '✅' },
-    preparing: { label: 'Preparing', bg: '#fef3c7', color: '#92400e', icon: '👨‍🍳' },
+    pending:    { label: 'Pending',    bg: '#fef9c3', color: '#854d0e', icon: '⏳' },
+    confirmed:  { label: 'Confirmed',  bg: '#e0f2fe', color: '#0369a1', icon: '✅' },
+    preparing:  { label: 'Preparing',  bg: '#fef3c7', color: '#92400e', icon: '👨‍🍳' },
     on_the_way: { label: 'On the Way', bg: '#ede9fe', color: '#6d28d9', icon: '🛵' },
-    delivered: { label: 'Delivered', bg: '#dcfce7', color: '#15803d', icon: '🎉' },
-    cancelled: { label: 'Cancelled', bg: '#fee2e2', color: '#b91c1c', icon: '❌' }
+    delivered:  { label: 'Delivered',  bg: '#dcfce7', color: '#15803d', icon: '🎉' },
+    cancelled:  { label: 'Cancelled',  bg: '#fee2e2', color: '#b91c1c', icon: '❌' }
 }
 
 function MyOrders() {
@@ -18,29 +18,24 @@ function MyOrders() {
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        fetchOrders()
-    }, [])
+    useEffect(() => { fetchOrders() }, [])
 
     const fetchOrders = async () => {
         try {
             const { data } = await axios.get(`${serverUrl}/api/order/my-orders`, { withCredentials: true })
             setOrders(data)
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setLoading(false)
-        }
+        } catch (error) { console.log(error) }
+        finally { setLoading(false) }
     }
 
     return (
         <div style={{ minHeight: '100vh', background: '#f9fafb', fontFamily: 'DM Sans, sans-serif' }}>
             <Navbar onCartClick={() => {}} />
 
-            <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1.5rem' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto', padding: 'clamp(1rem,3vw,2rem) clamp(1rem,3vw,1.5rem)' }}>
 
                 {/* Header */}
-                <div className="animate-fadeInUp" style={{ marginBottom: '2rem' }}>
+                <div style={{ marginBottom: '2rem' }}>
                     <button onClick={() => navigate('/')} style={{
                         background: 'none', border: 'none', cursor: 'pointer',
                         color: '#6b7280', fontSize: '14px', fontFamily: 'DM Sans, sans-serif',
@@ -48,7 +43,8 @@ function MyOrders() {
                         marginBottom: '12px', padding: 0
                     }}>← Back to Home</button>
                     <h1 style={{
-                        fontFamily: 'Syne, sans-serif', fontSize: '2rem',
+                        fontFamily: 'Syne, sans-serif',
+                        fontSize: 'clamp(1.5rem,4vw,2rem)',
                         fontWeight: '800', color: '#0f0f0f', margin: '0 0 4px'
                     }}>My Orders 📦</h1>
                     <p style={{ color: '#6b7280', fontSize: '14px', margin: 0 }}>
@@ -64,16 +60,13 @@ function MyOrders() {
                     </div>
                 ) : orders.length === 0 ? (
                     <div style={{
-                        background: 'white', borderRadius: '20px', padding: '4rem',
+                        background: 'white', borderRadius: '20px',
+                        padding: 'clamp(2rem,6vw,4rem)',
                         textAlign: 'center', border: '1px solid rgba(0,0,0,0.06)'
                     }}>
                         <div style={{ fontSize: '4rem', marginBottom: '16px' }}>📦</div>
-                        <h2 style={{ fontFamily: 'Syne, sans-serif', color: '#0f0f0f', margin: '0 0 8px' }}>
-                            No orders yet
-                        </h2>
-                        <p style={{ color: '#6b7280', marginBottom: '24px' }}>
-                            You haven't placed any orders yet
-                        </p>
+                        <h2 style={{ fontFamily: 'Syne, sans-serif', color: '#0f0f0f', margin: '0 0 8px' }}>No orders yet</h2>
+                        <p style={{ color: '#6b7280', marginBottom: '24px' }}>You haven't placed any orders yet</p>
                         <button onClick={() => navigate('/')} style={{
                             padding: '12px 28px',
                             background: 'linear-gradient(135deg, #ff4d2d, #ff7043)',
@@ -88,53 +81,45 @@ function MyOrders() {
                         {orders.map((order, i) => {
                             const status = statusConfig[order.status] || statusConfig.pending
                             return (
-                                <div key={order._id}
-                                    className={`animate-fadeInUp delay-${Math.min(i + 1, 5)}`}
+                                <div
+                                    key={order._id}
                                     onClick={() => navigate(`/order/${order._id}`)}
                                     style={{
-                                        background: 'white',
-                                        borderRadius: '20px',
-                                        padding: '1.5rem',
+                                        background: 'white', borderRadius: '20px',
+                                        padding: 'clamp(1rem,3vw,1.5rem)',
                                         border: '1px solid rgba(0,0,0,0.06)',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                                        cursor: 'pointer', transition: 'all 0.3s'
                                     }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.transform = 'translateY(-4px)'
-                                        e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)'
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.transform = 'translateY(0)'
-                                        e.currentTarget.style.boxShadow = 'none'
-                                    }}
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)' }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
                                 >
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
-                                        <div>
+                                    {/* Top row */}
+                                    <div style={{
+                                        display: 'flex', justifyContent: 'space-between',
+                                        alignItems: 'flex-start', marginBottom: '14px',
+                                        gap: '10px', flexWrap: 'wrap'
+                                    }}>
+                                        <div style={{ minWidth: 0 }}>
                                             <h3 style={{
-                                                fontFamily: 'Syne, sans-serif',
-                                                fontSize: '17px', fontWeight: '700',
-                                                color: '#0f0f0f', margin: '0 0 4px'
+                                                fontFamily: 'Syne, sans-serif', fontSize: 'clamp(14px,2.5vw,17px)',
+                                                fontWeight: '700', color: '#0f0f0f', margin: '0 0 4px',
+                                                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
                                             }}>
                                                 {order.restaurant?.name || 'Restaurant'}
                                             </h3>
                                             <p style={{ margin: 0, fontSize: '12px', color: '#9ca3af' }}>
-                                                #{order._id.slice(-8).toUpperCase()} • {new Date(order.createdAt).toLocaleDateString('en-IN', {
-                                                    day: 'numeric', month: 'short', year: 'numeric',
-                                                    hour: '2-digit', minute: '2-digit'
+                                                #{order._id.slice(-8).toUpperCase()} •{' '}
+                                                {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                                                    day: 'numeric', month: 'short', year: 'numeric'
                                                 })}
                                             </p>
                                         </div>
                                         <span style={{
-                                            background: status.bg,
-                                            color: status.color,
-                                            padding: '6px 14px',
-                                            borderRadius: '999px',
-                                            fontSize: '12px',
-                                            fontWeight: '600',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '5px',
-                                            whiteSpace: 'nowrap'
+                                            background: status.bg, color: status.color,
+                                            padding: '6px 12px', borderRadius: '999px',
+                                            fontSize: '12px', fontWeight: '600',
+                                            display: 'flex', alignItems: 'center', gap: '5px',
+                                            whiteSpace: 'nowrap', flexShrink: 0
                                         }}>
                                             {status.icon} {status.label}
                                         </span>
@@ -145,13 +130,20 @@ function MyOrders() {
                                         background: '#f9fafb', borderRadius: '12px',
                                         padding: '10px 14px', marginBottom: '14px'
                                     }}>
-                                        <p style={{ margin: 0, fontSize: '13px', color: '#374151' }}>
+                                        <p style={{
+                                            margin: 0, fontSize: '13px', color: '#374151',
+                                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
+                                        }}>
                                             {order.items.map(item => `${item.quantity}x ${item.name}`).join(' • ')}
                                         </p>
                                     </div>
 
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                    {/* Bottom row */}
+                                    <div style={{
+                                        display: 'flex', justifyContent: 'space-between',
+                                        alignItems: 'center', flexWrap: 'wrap', gap: '8px'
+                                    }}>
+                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
                                             <span style={{ fontSize: '13px', color: '#6b7280' }}>
                                                 {order.paymentMethod === 'cod' ? '💵 COD'
                                                     : order.paymentMethod === 'upi' ? '📱 UPI' : '💳 Card'}
